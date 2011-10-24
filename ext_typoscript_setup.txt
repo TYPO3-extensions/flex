@@ -1,0 +1,12 @@
+plugin.tx_flex.persistence {
+	storagePid =
+	enableAutomaticCacheClearing = 1
+	updateReferenceIndex = 0
+	classes {
+		Tx_Flex_Domain_Model_ContentElement {
+			mapping {
+				tableName = tt_content
+			}
+		}
+	}
+}

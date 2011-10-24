@@ -1,0 +1,40 @@
+plugin.tx_flex {
+	settings {
+		namespaces {
+			flex = Tx_Flex_ViewHelpers
+		}
+	}
+	persistence.storagePid = 2
+}
+
+# Add the template & layout CSS class to the tt_content wrap
+tt_content.stdWrap.innerWrap.cObject.default.15.value >
+tt_content.stdWrap.innerWrap.cObject.default.15.cObject = COA
+tt_content.stdWrap.innerWrap.cObject.default.15.cObject {
+	10 = TEXT
+	10.value = csc-default
+
+	20 = CONTENT
+	20 {
+		table = tx_flex_domain_model_layout
+		select {
+			pidInList.cObject = TEXT
+			pidInList.cObject.value < plugin.tx_flex.persistence.storagePid
+			andWhere.cObject = TEXT
+			andWhere.cObject {
+				field = block_layout
+				noTrimWrap = | uid = | |
+			}
+			max = 1
+		}
+		renderObj = TEXT
+		renderObj {
+			field = class
+			noTrimWrap = | ||
+		}
+	}
+
+	30 < .20
+	30.table = tx_flex_domain_model_template
+	30.select.andWhere.cObject.field = tx_flex_datastructure
+}

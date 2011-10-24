@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<type>database</type>
+		<description>Language labels for database tables/fields belonging to extension 'flex'</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="tx_flex_domain_model_template">Template</label>
+			<label index="tx_flex_domain_model_template.title">Title</label>
+			<label index="tx_flex_domain_model_template.datastructure">Datastructure</label>
+			<label index="tx_flex_domain_model_template.template_file">Template File</label>
+			<label index="tx_flex_domain_model_template.icon">Icon</label>
+			<label index="tx_flex_domain_model_template.class">Class</label>
+			<label index="tx_flex_domain_model_template.layout">Layout</label>
+			<label index="tx_flex_domain_model_contentelement">Content Element</label>
+			<label index="tx_flex_domain_model_contentelement.tx_flex_datastructure">Tx Flex Datastructure</label>
+			<label index="tx_flex_domain_model_contentelement.tx_flex_value">Tx Flex Value</label>
+			<label index="tx_flex_domain_model_contentelement.block_layout">Block Layout</label>
+			<label index="tx_flex_domain_model_layout">Layout</label>
+			<label index="tx_flex_domain_model_layout.title">Title</label>
+			<label index="tx_flex_domain_model_layout.layout_file">Layout File</label>
+			<label index="tx_flex_domain_model_layout.class">Class</label>
+		</languageKey>
+		<languageKey index="nl" type="array">
+			<label index="tx_flex_domain_model_template">Template</label>
+			<label index="tx_flex_domain_model_template.title">Titel</label>
+			<label index="tx_flex_domain_model_template.datastructure">Datastructuur</label>
+			<label index="tx_flex_domain_model_template.template_file">Template File</label>
+			<label index="tx_flex_domain_model_template.icon">Icoon</label>
+			<label index="tx_flex_domain_model_template.class">CSS Class</label>
+			<label index="tx_flex_domain_model_template.layout">Layout</label>
+			<label index="tx_flex_domain_model_contentelement">Content Element</label>
+			<label index="tx_flex_domain_model_contentelement.tx_flex_datastructure">Datastructuur</label>
+			<label index="tx_flex_domain_model_contentelement.tx_flex_value">Tx Flex Value</label>
+			<label index="tx_flex_domain_model_contentelement.block_layout">Bouwblok layout</label>
+			<label index="tx_flex_domain_model_layout">Layout</label>
+			<label index="tx_flex_domain_model_layout.title">Titel</label>
+			<label index="tx_flex_domain_model_layout.layout_file">Fluid Layout</label>
+			<label index="tx_flex_domain_model_layout.class">CSS Class</label>
+		</languageKey>
+	</data>
+</T3locallang>

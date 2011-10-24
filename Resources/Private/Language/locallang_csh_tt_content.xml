@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+    <meta type="array">
+        <description>Context Sensitive Help (CSH) for table tt_content</description>
+        <type>CSH</type>
+        <csh_table>tt_content</csh_table>
+    </meta>
+    <data type="array">
+        <languageKey index="default" type="array">
+			<label index="tx_flex_datastructure.description">txFlexDatastructure</label>
+			<label index="tx_flex_value.description">txFlexValue</label>
+			<label index="block_layout.description">blockLayout</label>
+		</languageKey>
+    </data>
+</T3locallang>
