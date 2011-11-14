@@ -3,7 +3,7 @@
 // This file was generated on 2011-10-25 08:00
 
 $extensionPath = t3lib_extMgm::extPath('flex');
-$extensionClassesPath = $extensionPath . 'classes/';
+$extensionClassesPath = $extensionPath . 'Classes/';
 return array(
 	'tx_flex_controller_standardcontroller' => $extensionClassesPath . 'Controller/StandardController.php',
 	'tx_flex_domain_model_layout' => $extensionClassesPath . 'Domain/Model/Layout.php',

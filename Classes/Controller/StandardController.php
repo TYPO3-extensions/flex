@@ -119,29 +119,34 @@ class Tx_Flex_Controller_StandardController extends Tx_Extbase_MVC_Controller_Ac
 		$html = '';
 		$view = t3lib_div::makeInstance('Tx_Fluid_View_StandaloneView');
 
-			// Add namespaces
-		if (!empty($this->settings['namespaces']) && is_array($this->settings['namespaces'])) {
-			foreach ($this->settings['namespaces'] as $namespace => $path) {
-				$html .= '{namespace ' . $namespace . '=' . $path . '}';
-			}
-		}
+		try {
 
-		$templateFile = $template->getTemplateFile();
-		if (!empty($templateFile)) {
-			$baseDirectory = t3lib_div::dirname(PATH_site . $templateFile) . DIRECTORY_SEPARATOR;
-			$view->setLayoutRootPath($baseDirectory . 'Layouts/');
-			$view->setPartialRootPath($baseDirectory . 'Partials/');
-			$view->setTemplateSource(t3lib_div::getUrl(PATH_site . $templateFile));
-		} else {
-			foreach ($renderingConfigurations as $key => $value) {
-				$html .= "{elements." . $key . "->flex:typoScript()}";
+				// Add namespaces
+			if (!empty($this->settings['namespaces']) && is_array($this->settings['namespaces'])) {
+				foreach ($this->settings['namespaces'] as $namespace => $path) {
+					$html .= '{namespace ' . $namespace . '=' . $path . '}';
+				}
 			}
-			$view->setTemplateSource($html);
-		}
 
-		$view->assign('elements', $renderingConfigurations);
-		$view->assign('contentObject', $this->cObject);
-		return $view->render();
+			$templateFile = $template->getTemplateFile();
+			if (!empty($templateFile)) {
+				$baseDirectory = t3lib_div::dirname(PATH_site . $templateFile) . DIRECTORY_SEPARATOR;
+				$view->setLayoutRootPath($baseDirectory . 'Layouts/');
+				$view->setPartialRootPath($baseDirectory . 'Partials/');
+				$view->setTemplateSource($html . t3lib_div::getUrl(PATH_site . $templateFile));
+			} else {
+				foreach ($renderingConfigurations as $key => $value) {
+					$html .= "{elements." . $key . "->flex:typoScript()}";
+				}
+				$view->setTemplateSource($html);
+			}
+
+			$view->assign('elements', $renderingConfigurations);
+			$view->assign('contentObject', $this->cObject);
+			return $view->render();
+		} catch (Exception $e) {
+			return 'An error occured during the rendering of a Flex content element: ' .$e->getMessage();
+		}
 	}
 
 	/**
