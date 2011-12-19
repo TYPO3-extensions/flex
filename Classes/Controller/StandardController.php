@@ -24,7 +24,6 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-
 /**
  * Controller for the Template object
  *
@@ -78,7 +77,7 @@ class Tx_Flex_Controller_StandardController extends Tx_Extbase_MVC_Controller_Ac
 	 */
 	public function indexAction() {
 		if (!empty($this->cObject->data['tx_flex_datastructure'])) {
-			$template = $this->templateRepository->findByUid((int) $this->cObject->data['tx_flex_datastructure']);
+			$template = $this->templateRepository->findByUid((int)$this->cObject->data['tx_flex_datastructure']);
 			return $this->show($template);
 		} else {
 			return '';
@@ -93,9 +92,25 @@ class Tx_Flex_Controller_StandardController extends Tx_Extbase_MVC_Controller_Ac
 	 */
 	public function show(Tx_Flex_Domain_Model_Template $template) {
 
+		// TODO: Remove some nesting levels
 		$flexformValues = t3lib_div::xml2array($this->cObject->data['tx_flex_value']);
 		foreach ($flexformValues['data']['sDEF']['lDEF'] as $key => $value) {
-			$this->cObject->data['flex_' . $key] = $value['vDEF'];
+			if ($key !== 'numIndex') {
+				$this->cObject->data['flex_' . $key] = $value['vDEF'];
+			} else {
+				$i = 0;
+				foreach ($value['el'] as $el) {
+					foreach ($el as $subKey => $subValueConfig) {
+						if ($subKey === '_TOGGLE') {
+							continue;
+						}
+						foreach ($subValueConfig['el'] as $subValueKey => $subValueValue) {
+							$this->cObject->data['flex_' . $i . '__' . $subValueKey] = $subValueValue['vDEF'];
+						}
+					}
+					$i++;
+				}
+			}
 		}
 
 		$renderingConfigurations = array();
@@ -121,7 +136,7 @@ class Tx_Flex_Controller_StandardController extends Tx_Extbase_MVC_Controller_Ac
 
 		try {
 
-				// Add namespaces
+			// Add namespaces
 			if (!empty($this->settings['namespaces']) && is_array($this->settings['namespaces'])) {
 				foreach ($this->settings['namespaces'] as $namespace => $path) {
 					$html .= '{namespace ' . $namespace . '=' . $path . '}';
@@ -145,7 +160,7 @@ class Tx_Flex_Controller_StandardController extends Tx_Extbase_MVC_Controller_Ac
 			$view->assign('contentObject', $this->cObject);
 			return $view->render();
 		} catch (Exception $e) {
-			return 'An error occured during the rendering of a Flex content element: ' .$e->getMessage();
+			return 'An error occured during the rendering of a Flex content element: ' . $e->getMessage();
 		}
 	}
 
@@ -155,26 +170,33 @@ class Tx_Flex_Controller_StandardController extends Tx_Extbase_MVC_Controller_Ac
 	 *
 	 * @param array $configurationArray
 	 * @param array $values
+	 * @param integer $rowIterator Iterator used for child records
 	 * @return array
 	 */
-	private function parseElement(array $configurationArray, array $values) {
+	private function parseElement(array $configurationArray, array $values, $rowIterator = NULL) {
 		$renderingConfigurations = array();
 		foreach ($values as $index => $element) {
 			if (!isset($configurationArray[$index])) {
 				continue;
 			}
 
-				// Do we need to render this specific item?
+			// Do we need to render this specific item?
 			if (isset($configurationArray[$index]['tx_flex']) && isset($configurationArray[$index]['tx_flex']['eType'])) {
-				$renderingConfigurations[$index]['configuration'] = $this->parseRenderConfiguration($configurationArray[$index]['tx_flex'], $element, $values);
+				$configurationValue = $this->parseRenderConfiguration($configurationArray[$index]['tx_flex'], $element, $values);
+				if (is_int($rowIterator)) {
+					$configurationValue = str_replace('flex_', 'flex_' . $rowIterator . '__', $configurationValue);
+				}
+				$renderingConfigurations[$index]['configuration'] = $configurationValue;
 			} else {
 				if (isset($configurationArray[$index]['section'])) {
 					$renderingConfigurations['children'] = array();
+					$i = 0;
 					foreach ($element as $value) {
-						$renderingConfigurations['children'][] = $this->parseElement($configurationArray[$index]['el'], $value);
+						$renderingConfigurations['children'][] = $this->parseElement($configurationArray[$index]['el'], $value, $i);
+						$i++;
 					}
 				} else {
-					$renderingConfigurations = $this->parseElement($configurationArray[$index]['el'], $element);
+					$renderingConfigurations = $this->parseElement($configurationArray[$index]['el'], $element, $rowIterator);
 				}
 			}
 		}
@@ -213,12 +235,12 @@ class Tx_Flex_Controller_StandardController extends Tx_Extbase_MVC_Controller_Ac
 	 */
 	private function getTypoScriptRenderingConfiguration(array $renderConfiguration, array $allValues) {
 		if (!empty($renderConfiguration['TypoScript']) &&
-				$renderConfiguration['eType'] == 'TypoScript') {
+				$renderConfiguration['eType'] == 'TypoScript'
+		) {
 			return $renderConfiguration['TypoScript'];
 		}
 		return NULL;
 	}
-
 }
 
 ?>
